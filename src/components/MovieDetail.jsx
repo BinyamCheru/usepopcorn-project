@@ -4,10 +4,15 @@ import Loader from "./Loader";
 
 const KEY = "e015d40b";
 
-const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched }) => {
+const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID === selectedId
+  )?.userRating;
 
   const {
     Title: title,
@@ -77,15 +82,23 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched }) => {
           </header>
           <section>
             <div className="rating">
-              <StarRating
-                maxRating={10}
-                size={24}
-                onSetRating={setUserRating}
-              />
-              {userRating > 0 && (
-                <button className="btn-add" onClick={handleAdd}>
-                  + Add to list
-                </button>
+              {isWatched ? (
+                <p>
+                  You rated this movie {watchedUserRating} <span>⭐</span>{" "}
+                </p>
+              ) : (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      + Add to list
+                    </button>
+                  )}
+                </>
               )}
             </div>
             <p>

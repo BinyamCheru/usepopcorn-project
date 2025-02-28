@@ -1,14 +1,14 @@
 import ListBox from "./ListBox";
 import WatchedBox from "./WatchedBox";
 
-const MainBody = () => {
+const Main = ({movies} ) => {
 
 
   return (
     <main className="main">
-      <ListBox />
+      <ListBox movies={movies} />
       <WatchedBox />
     </main>
   );
 };
-export default MainBody;
+export default Main;

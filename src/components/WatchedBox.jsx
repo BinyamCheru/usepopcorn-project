@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { tempWatchedData } from "../data";
+import { tempWatchedData } from "./data";
 import WatchedSummary from "./WatchedSummary";
 import WatchedMoviesList from "./WatchedMoviesList";
 

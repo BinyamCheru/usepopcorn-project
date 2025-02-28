@@ -18,21 +18,19 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      // console.log(data.Search);
-      setMovies(data.Search);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(()=>{
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        // console.log(data.Search);
+        setMovies(data.Search);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-
-  },[])
-
+  }, []);
 
   return (
     <>

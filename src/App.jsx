@@ -13,6 +13,7 @@ import WatchedMoviesList from "./components/WatchedMoviesList";
 import Loader from "./components/Loader";
 import Movie from "./components/Movie";
 import ErrorMessage from "./components/ErrorMessage";
+import MovieDetail from "./components/MovieDetail";
 
 const KEY = "e015d40b";
 
@@ -22,16 +23,24 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedId, setSelectedId] = useState("tt1727388");
+  const [selectedId, setSelectedId] = useState(null);
 
-  const url = `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`;
+  const handleSelectMovie = (id) => {
+    setSelectedId((selectedId) => selectedId === id ? null : id);
+  };
+
+  const handleCloseMovie = () => {
+    setSelectedId(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         setError("");
-        const response = await fetch(url);
+        const response = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        );
 
         if (!response.ok) throw new Error("Something went wrong!");
 
@@ -66,12 +75,23 @@ export default function App() {
         <Box>
           {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
           {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetail
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>

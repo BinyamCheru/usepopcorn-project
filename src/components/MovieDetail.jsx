@@ -42,6 +42,11 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   };
 
   useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+  }, [title]);
+
+  useEffect(() => {
     try {
       const getMovieDetail = async () => {
         setIsLoading(true);

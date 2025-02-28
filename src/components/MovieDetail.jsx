@@ -4,9 +4,10 @@ import Loader from "./Loader";
 
 const KEY = "e015d40b";
 
-const MovieDetail = ({ selectedId, onCloseMovie }) => {
+const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
 
   const {
     Title: title,
@@ -20,6 +21,20 @@ const MovieDetail = ({ selectedId, onCloseMovie }) => {
     Director: director,
     Genre: genre,
   } = movie;
+
+  const handleAdd = () => {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+      userRating,
+    };
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  };
 
   useEffect(() => {
     try {
@@ -45,7 +60,7 @@ const MovieDetail = ({ selectedId, onCloseMovie }) => {
       ) : (
         <>
           <header>
-            <button className="btn-close" onClick={onCloseMovie}>
+            <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
             <img src={poster} alt={`Poster of ${movie} movie`} />
@@ -62,14 +77,23 @@ const MovieDetail = ({ selectedId, onCloseMovie }) => {
           </header>
           <section>
             <div className="rating">
-              <StarRating maxRating={10} size={24} />
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className="btn-add" onClick={handleAdd}>
+                  + Add to list
+                </button>
+              )}
             </div>
             <p>
               <em>{plot} </em>
             </p>
             <p>Starring {actors} </p>
             <p>Directed by: {director} </p>
-          </section>{" "}
+          </section>
         </>
       )}
     </div>

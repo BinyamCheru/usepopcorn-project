@@ -27,16 +27,6 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     Genre: genre,
   } = movie;
 
-  // const [isTop, setIsTop] = useState(imdbRating > 8);
-  // console.log(isTop);
-  // useEffect(() => {
-  //   setIsTop(imdbRating > 8);
-  // }, [imdbRating]);
-
-  // Derived state
-  // const isTop = imdbRating > 8;
-  // console.log(isTop)
-
   useEffect(() => {
     const callback = (e) => {
       if (e.code === "Escape") {
@@ -51,9 +41,9 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     };
   }, [onCloseMovie]);
 
-  const handleAdd = () => {
+  const [avgRating, setAvgRating] = useState(0);
 
-    
+  const handleAdd = () => {
     const newWatchedMovie = {
       imdbID: selectedId,
       title,
@@ -64,6 +54,8 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
       userRating,
     };
     onAddWatched(newWatchedMovie);
+    setAvgRating(Number(imdbRating));
+    setAvgRating((avgRating) => (avgRating + userRating) / 2);
     // onCloseMovie();
   };
 
@@ -114,6 +106,8 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
               </p>
             </div>
           </header>
+          <p>{avgRating} </p>
+
           <section>
             <div className="rating">
               {isWatched ? (

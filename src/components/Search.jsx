@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 const Search = ({ query, setQuery }) => {
   const inputElement = useRef(null);
 
+
   useEffect(() => {
     const callback = (e) => {
       if (document.activeElement === inputElement.current) return;

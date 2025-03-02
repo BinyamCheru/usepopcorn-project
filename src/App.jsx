@@ -13,17 +13,14 @@ import Loader from "./components/Loader";
 import Movie from "./components/Movie";
 import ErrorMessage from "./components/ErrorMessage";
 import MovieDetail from "./components/MovieDetail";
-
-const KEY = "e015d40b";
+import { useMovies } from "./components/useMovies";
 
 export default function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-    // const [watched, setWatched] = useState([])
+  const { movies, isLoading, error } = useMovies(query);
+  // const [watched, setWatched] = useState([])
   // you can pass callback function in the useState it will be run only in the initial render and it can't accept a a parameter
   const [watched, setWatched] = useState(() => {
     const storedValue = localStorage.getItem("watched");
@@ -55,47 +52,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("watched", JSON.stringify(watched));
   }, [watched]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setError("");
-        const response = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-          { signal: controller.signal }
-        );
-
-        if (!response.ok) throw new Error("Something went wrong!");
-
-        const data = await response.json();
-
-        if (data.Response === "False") throw new Error("Movie not found");
-        console.log(data.Search);
-        setMovies(data.Search);
-        setError("");
-      } catch (error) {
-        if (error.message !== "AbortError") {
-          setError(error.message);
-        }
-        console.log(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (query.length < 3) {
-      setMovies([]);
-      setError("");
-      return;
-    }
-    fetchData();
-
-    return () => {
-      controller.abort();
-    };
-  }, [query]);
 
   return (
     <>

@@ -41,8 +41,6 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     };
   }, [onCloseMovie]);
 
-  const [avgRating, setAvgRating] = useState(0);
-
   const handleAdd = () => {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -54,9 +52,7 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
       userRating,
     };
     onAddWatched(newWatchedMovie);
-    setAvgRating(Number(imdbRating));
-    setAvgRating((avgRating) => (avgRating + userRating) / 2);
-    // onCloseMovie();
+    onCloseMovie();
   };
 
   useEffect(() => {
@@ -106,8 +102,6 @@ const MovieDetail = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
               </p>
             </div>
           </header>
-          <p>{avgRating} </p>
-
           <section>
             <div className="rating">
               {isWatched ? (
